@@ -85,7 +85,7 @@ export function replaceRangoliColor(design, oldColor, newColor) {
 }
 
 export function makeRangoliBorder(char, length) {
-  // Your code here
+  // Your code here 
 
   if (typeof char !== "string") return "";
   if (!Number.isInteger(length) || length <= 0) return "";
