@@ -59,20 +59,46 @@
  */
 export function getDataType(value) {
   // Your code here
+  if (typeof value === "object" && value === null) return "null";
+  if (typeof value === "object" && Array.isArray(value)) return "array";
+  let dataType = typeof value;
+  return dataType;
 }
 
 export function isValidParcelWeight(weight) {
   // Your code here
+  if (typeof weight !== "number") return false;
+  if (Number.isNaN(weight) || !Number.isFinite(weight)) return false;
+  if (Number.isFinite(weight) && weight > 0) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 export function isWholeNumber(value) {
   // Your code here
+  if (Number.isInteger(value)) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 export function isNotANumber(value) {
   // Your code here
+  if (Number.isNaN(value)) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 export function isTruthy(value) {
   // Your code here
+  if (Boolean(value)) {
+    return true;
+  } else {
+    return false;
+  }
 }
