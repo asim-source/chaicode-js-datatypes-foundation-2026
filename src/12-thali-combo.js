@@ -54,16 +54,110 @@
  */
 export function createThaliDescription(thali) {
   // Your code here
+  let t;
+  if (typeof thali !== "object" || Array.isArray(thali) || thali === null)
+    return "";
+  if (
+    !thali.hasOwnProperty("name") ||
+    !thali.hasOwnProperty("items") ||
+    !thali.hasOwnProperty("price") ||
+    !thali.hasOwnProperty("isVeg")
+  )
+    return "";
+  let newNamingSystem = thali.name.toUpperCase();
+
+  let pricing = thali.price.toFixed(2);
+  if (thali.isVeg === true) {
+    t = "Veg";
+  } else {
+    t = "Non-Veg";
+  }
+  let iteming = thali.items.join(", ");
+
+  let ultimate = `${newNamingSystem} (${t}) - Items: ${iteming} - Rs.${pricing}`;
+  return ultimate;
 }
 
 export function getThaliStats(thalis) {
   // Your code here
+
+  if (!Array.isArray(thalis) || thalis.length === 0) return null;
+  let countV = thalis.filter((counting) => {
+    if (counting.isVeg === true) return counting;
+  });
+  let countVeg = countV.length;
+  console.log(countVeg);
+
+  let countNV = thalis.filter((NVegi) => {
+    if (NVegi.isVeg === false) return NVegi;
+  });
+  let countNonVeg = countNV.length;
+
+  let countTotal = thalis.length;
+
+  let AvgCount = 0;
+  let reduceAnswer = thalis.reduce((acc, obj) => {
+    ++AvgCount;
+    return acc + obj.price;
+  }, 0);
+
+  let totalAverage = reduceAnswer / AvgCount;
+  let totalAverageDecimal = totalAverage.toFixed(2);
+  let decimalString = String(totalAverageDecimal);
+
+  let totalName = thalis.map((naming) => naming.name);
+
+  let Mpricing = thalis.map((p) => p.price);
+  let Minimum = Math.min(...Mpricing);
+  let Maximum = Math.max(...Mpricing);
+
+  return {
+    totalThalis: countTotal,
+    vegCount: countVeg,
+    nonVegCount: countNonVeg,
+    avgPrice: decimalString,
+    cheapest: Minimum,
+    costliest: Maximum,
+    names: totalName,
+  };
 }
 
 export function searchThaliMenu(thalis, query) {
   // Your code here
+  if (!Array.isArray(thalis) || typeof query !== "string") return [];
+  const caseQuery = query.toLowerCase();
+
+  const findThali = thalis.filter((naming) => {
+    if (
+      naming.name.toLowerCase().includes(caseQuery) ||
+      naming.items.some((item) => item.toLowerCase().includes(caseQuery))
+    )
+      return naming;
+  });
+  return findThali;
 }
 
 export function generateThaliReceipt(customerName, thalis) {
   // Your code here
+  if (
+    typeof customerName !== "string" ||
+    !Array.isArray(thalis) ||
+    thalis.length === 0
+  )
+    return "";
+  const newNamingSystem = customerName.toUpperCase();
+  const Np = thalis
+    .map((Npricing) => {
+      return `- ${Npricing.name} x Rs.${Npricing.price}`;
+    })
+    .join("\n");
+  console.log(Np);
+
+  const totality = thalis.reduce((accumulator, tota) => {
+    return accumulator + tota.price;
+  }, 0);
+  const countTotal = thalis.filter((counterPart) => counterPart);
+  const totalcount = countTotal.length;
+
+  return `THALI RECEIPT\n---\nCustomer: ${newNamingSystem}\n${Np}\n---\nTotal: Rs.${totality}\nItems: ${totalcount}`;
 }
